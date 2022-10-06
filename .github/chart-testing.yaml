@@ -1,5 +1,5 @@
 remote: origin
-target-branch: main
+target-branch: master
 debug: true
 check-version-increment: true
 upgrade: true
