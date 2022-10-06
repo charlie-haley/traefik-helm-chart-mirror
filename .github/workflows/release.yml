@@ -1,0 +1,49 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    uses: "charlie-haley/traefik-helm-chart-mirror/.github/workflows/test.yml@main"
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config --global --add safe.directory /charts
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.4.1
+        with:
+          config: ./.github/chart-releaser.yaml
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  copy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Copy index.md to gh-pages
+        uses: ./.github/actions/copy
+        with:
+          destination_branch: "gh-pages"
+          file: ./index.md
+
+      - name: Copy artifacthub-repo.yml to gh-pages
+        uses: ./.github/actions/copy
+        with:
+          destination_branch: "gh-pages"
+          file: ./artifacthub-repo.yml

@@ -1,0 +1,6 @@
+      ports:
+        web:
+          expose: false
+        websecure:
+          expose: false
+
