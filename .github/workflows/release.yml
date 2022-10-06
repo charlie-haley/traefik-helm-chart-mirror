@@ -3,11 +3,11 @@ name: Release Charts
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   test:
-    uses: "charlie-haley/traefik-helm-chart-mirror/.github/workflows/test.yml@main"
+    uses: "charlie-haley/traefik-helm-chart-mirror/.github/workflows/test.yml@master"
   release:
     needs: test
     runs-on: ubuntu-latest
