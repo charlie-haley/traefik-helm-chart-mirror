@@ -10,14 +10,14 @@
   {{- if eq (toString (default "TCP" $config.protocol)) "TCP" }}
     {{ $_ := set $tcpPorts $name $config }}
   {{- end }}
-  {{- if (eq $config.expose true) }}
+  {{- if $config.expose }}
     {{ $exposedPorts = true }}
   {{- end }}
 {{- end }}
-
-{{- if (eq $exposedPorts false) }}
+{{- if not $exposedPorts }}
   {{ fail "You need to expose at least one port or set enabled=false to service" }}
 {{- end }}
+
 
 apiVersion: v1
 kind: List
@@ -76,7 +76,7 @@ items:
       ipFamilyPolicy: {{ .Values.service.ipFamilyPolicy }}
       {{- end }}
       {{- with .Values.service.ipFamilies }}
-      ipFamilies: 
+      ipFamilies:
       {{- toYaml . | nindent 6 }}
       {{- end -}}
 {{- end }}
@@ -136,7 +136,7 @@ items:
       ipFamilyPolicy: {{ .Values.service.ipFamilyPolicy }}
       {{- end }}
       {{- with .Values.service.ipFamilies }}
-      ipFamilies: 
+      ipFamilies:
       {{- toYaml . | nindent 6 }}
       {{- end -}}
 {{- end }}

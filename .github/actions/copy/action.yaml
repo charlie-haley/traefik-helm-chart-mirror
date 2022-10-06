@@ -1,0 +1,26 @@
+name: "Copy"
+description: "Copies a file from one branch to another."
+
+inputs:
+  file:
+    description: "File to copy to the destination branch."
+  destination_branch:
+    description: "Destination branch to copy the file to."
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        git fetch
+        git checkout ${{ inputs.destination_branch }}
+        git checkout ${GITHUB_REF##*/} -- ${{ inputs.file }}
+
+        git add -A
+        git diff-index --quiet HEAD ||  git commit -am "deploy ${{ inputs.file }}"
+        git push origin ${{ inputs.destination_branch }}
+
+    - shell: bash
+      run: |
+        # return to default branch
+        git checkout $(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
