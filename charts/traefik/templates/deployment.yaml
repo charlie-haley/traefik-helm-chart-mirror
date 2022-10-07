@@ -18,6 +18,7 @@ kind: Deployment
 metadata:
   name: {{ template "traefik.fullname" . }}
   labels:
+    test: cool
     app.kubernetes.io/name: {{ template "traefik.name" . }}
     helm.sh/chart: {{ template "traefik.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
