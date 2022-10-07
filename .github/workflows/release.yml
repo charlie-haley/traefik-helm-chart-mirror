@@ -23,12 +23,39 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git config --global --add safe.directory /charts
 
+      - name: "Build Changelog"
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v3.3.1
+        with:
+          configurationJson: |
+            {
+                "categories": [
+                  {
+                    "title": "## 🚀 Features",
+                    "labels": ["kind/enhancement"]
+                  },
+                  {
+                    "title": "## 🐛 Fixes",
+                    "labels": ["kind/bug/fix"]
+                  },
+                  {
+                    "title": "## 📝 Documentation",
+                    "labels": ["area/documentation"]
+                  }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save changelog to file
+        run: echo "${{steps.build_changelog.outputs.changelog}}" > CHANGELOG
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.1
         with:
           config: ./.github/chart-releaser.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_RELEASE_NOTES_FILE: "CHANGELOG"
   copy:
     needs: release
     runs-on: ubuntu-latest
