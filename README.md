@@ -96,4 +96,4 @@ Accessible with the url: http://traefik.localhost/dashboard/
 
 ## Contributing
 
-If you want to contribute to this chart, please read the [Contributing Guide](./CONTRIBUTING.md).
+If you want to contribute to this chart, please read the [Contributing Guide](./CONTRIBUTING.md). 
