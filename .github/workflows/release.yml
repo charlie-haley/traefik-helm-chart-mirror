@@ -43,7 +43,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: ${{ steps.chart_version.outputs.CHART_VERSION }}"
+          custom_tag: ${{ steps.chart_version.outputs.CHART_VERSION }}
           tag_prefix: ""
         if: steps.tag_exists.outputs.TAG_EXISTS
 
